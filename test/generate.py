@@ -8,7 +8,6 @@ from bert4keras.models import build_transformer_model
 from bert4keras.tokenizers import Tokenizer
 from bert4keras.snippets import sequence_padding, AutoRegressiveDecoder
 from bert4keras.snippets import uniout
-from keras.layers import *
 
 maxlen = 64
 
@@ -21,23 +20,22 @@ dict_path = '/root/kg/bert/chinese_roformer-sim-char_L-12_H-768_A-12/vocab.txt'
 tokenizer = Tokenizer(dict_path, do_lower_case=True)  # 建立分词器
 
 # 建立加载模型
-bert = build_transformer_model(
+roformer = build_transformer_model(
     config_path,
     checkpoint_path,
     model='roformer',
-    with_pool='linear',
     application='unilm',
-    return_keras_model=False,
+    with_pool='linear'
 )
 
-encoder = keras.models.Model(bert.model.inputs, bert.model.outputs[0])
-seq2seq = keras.models.Model(bert.model.inputs, bert.model.outputs[1])
+encoder = keras.models.Model(roformer.inputs, roformer.outputs[0])
+seq2seq = keras.models.Model(roformer.inputs, roformer.outputs[1])
 
 
 class SynonymsGenerator(AutoRegressiveDecoder):
-    """seq2seq解码器
-    """
-    @AutoRegressiveDecoder.wraps(default_rtype='logits')
+    '''seq2seq解码器
+    '''
+    @AutoRegressiveDecoder.wraps(default_rtype='probas')
     def predict(self, inputs, output_ids, step):
         token_ids, segment_ids = inputs
         token_ids = np.concatenate([token_ids, output_ids], 1)
@@ -57,9 +55,9 @@ synonyms_generator = SynonymsGenerator(
 
 
 def gen_synonyms(text, n=100, k=20):
-    """"含义： 产生sent的n个相似句，然后返回最相似的k个。
+    ''''含义： 产生sent的n个相似句，然后返回最相似的k个。
     做法：用seq2seq生成，并用encoder算相似度并排序。
-    """
+    '''
     r = synonyms_generator.generate(text, n)
     r = [i for i in set(r) if i != text]
     r = [text] + r
