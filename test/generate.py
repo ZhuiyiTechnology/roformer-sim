@@ -33,8 +33,8 @@ seq2seq = keras.models.Model(roformer.inputs, roformer.outputs[1])
 
 
 class SynonymsGenerator(AutoRegressiveDecoder):
-    '''seq2seq解码器
-    '''
+    """seq2seq解码器
+    """
     @AutoRegressiveDecoder.wraps(default_rtype='probas')
     def predict(self, inputs, output_ids, step):
         token_ids, segment_ids = inputs
@@ -55,9 +55,9 @@ synonyms_generator = SynonymsGenerator(
 
 
 def gen_synonyms(text, n=100, k=20):
-    ''''含义： 产生sent的n个相似句，然后返回最相似的k个。
+    """'含义： 产生sent的n个相似句，然后返回最相似的k个。
     做法：用seq2seq生成，并用encoder算相似度并排序。
-    '''
+    """
     r = synonyms_generator.generate(text, n)
     r = [i for i in set(r) if i != text]
     r = [text] + r
