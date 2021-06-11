@@ -42,8 +42,10 @@ class SynonymsGenerator(AutoRegressiveDecoder):
         segment_ids = np.concatenate([segment_ids, np.ones_like(output_ids)], 1)
         return self.last_token(seq2seq).predict([token_ids, segment_ids])
 
-    def generate(self, text, n=1, topp=0.95):
+    def generate(self, text, n=1, topp=0.95, mask_idxs=[]):
         token_ids, segment_ids = tokenizer.encode(text, maxlen=maxlen)
+        for i in mask_idxs:
+            token_ids[i] = tokenizer._token_mask_id
         output_ids = self.random_sample([token_ids, segment_ids], n,
                                         topp=topp)  # 基于随机采样
         return [tokenizer.decode(ids) for ids in output_ids]
@@ -54,11 +56,11 @@ synonyms_generator = SynonymsGenerator(
 )
 
 
-def gen_synonyms(text, n=100, k=20):
-    """'含义： 产生sent的n个相似句，然后返回最相似的k个。
+def gen_synonyms(text, n=100, k=20, mask_idxs=[]):
+    ''''含义： 产生sent的n个相似句，然后返回最相似的k个。
     做法：用seq2seq生成，并用encoder算相似度并排序。
-    """
-    r = synonyms_generator.generate(text, n)
+    '''
+    r = synonyms_generator.generate(text, n, mask_idxs=mask_idxs)
     r = [i for i in set(r) if i != text]
     r = [text] + r
     X, S = [], []
