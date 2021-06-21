@@ -9,6 +9,7 @@ tensorflow 1.14 + keras 2.3.1 + bert4keras 0.10.6
 
 ## 下载
 - [chinese_roformer-sim-char_L-12_H-768_A-12.zip](https://pan.baidu.com/s/1f1FB288nv1a6jYjsNCordg)(提取码：2cgz)
+- [chinese_roformer-sim-char_L-6_H-384_A-6.zip](https://pan.baidu.com/s/1r0eJ7shGwQ0RzV9BTFFW4g)(提取码：h68q)
 
 ## 引用
 
