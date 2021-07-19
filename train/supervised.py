@@ -150,12 +150,6 @@ encoder = build_transformer_model(
     ignore_invalid_weights=True,
     return_keras_model=False
 )
-encoder.model.load_weights('./roformer-sim.60.weights')
-encoder.save_weights_as_checkpoint(
-    '/root/kg/bert/chinese_roformer-sim-char-ft_L-12_H-768_A-12/bert_model.ckpt'
-)
-xxxx
-
 output = keras.layers.Lambda(merge)(encoder.output)
 output = keras.layers.Dense(5, use_bias=False)(output)
 
