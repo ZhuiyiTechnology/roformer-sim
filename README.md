@@ -2,7 +2,8 @@
 RoFormer-Sim，又称SimBERTv2，是我们之前发布的[SimBERT](https://github.com/ZhuiyiTechnology/simbert)模型的升级版。
 
 ## 介绍
-- https://kexue.fm/archives/8454
+- 弱监督：https://kexue.fm/archives/8454
+- 有监督：https://kexue.fm/archives/8541
 
 ## 训练
 tensorflow 1.14 + keras 2.3.1 + bert4keras 0.10.6
