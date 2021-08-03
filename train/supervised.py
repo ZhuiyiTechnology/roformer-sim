@@ -147,8 +147,7 @@ encoder = build_transformer_model(
     model='roformer',
     with_pool='linear',
     dropout_rate=0.2,
-    ignore_invalid_weights=True,
-    return_keras_model=False
+    ignore_invalid_weights=True
 )
 output = keras.layers.Lambda(merge)(encoder.output)
 output = keras.layers.Dense(5, use_bias=False)(output)
